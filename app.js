@@ -150,6 +150,16 @@ form.addEventListener("submit", (event) => {
     return;
   }
 
+  const duplicateEmail = students.some((item) =>
+  item.email.toLocaleLowerCase("es") === student.email.toLocaleLowerCase("es")
+  && item.id !== student.id
+);
+
+if (duplicateEmail) {
+  formMessage.textContent = "Ya existe un estudiante con ese correo electrónico.";
+  emailInput.focus();
+  return;
+}
   const editing = students.some((item) => item.id === student.id);
   if (editing) {
     students = students.map((item) => item.id === student.id ? student : item);
