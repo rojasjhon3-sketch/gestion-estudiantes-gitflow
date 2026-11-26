@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sistema CRUD para gestionar estudiantes.">
+  <title>Gestión de Estudiantes</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <main class="container">
+    <header class="header">
+      <div>
+        <p class="eyebrow">SISTEMA ACADÉMICO</p>
+        <h1>Gestión de estudiantes</h1>
+        <p class="subtitle">Registra, consulta, edita y administra estudiantes.</p>
+      </div>
+      <span class="header-icon" aria-hidden="true">🎓</span>
+    </header>
+
+    <section class="stats" aria-label="Resumen">
+      <article class="stat-card">
+        <span class="stat-label">Estudiantes registrados</span>
+        <strong id="totalStudents">0</strong>
+      </article>
+      <article class="stat-card">
+        <span class="stat-label">Estudiantes activos</span>
+        <strong id="activeStudents">0</strong>
+      </article>
+    </section>
+
+    <section class="panel form-panel">
+      <div class="section-heading">
+        <div>
+          <h2 id="formTitle">Registrar estudiante</h2>
+          <p>Completa los datos solicitados.</p>
+        </div>
+      </div>
+
+      <form id="studentForm">
+        <input type="hidden" id="studentId">
+        <div class="form-grid">
+          <label>
+            Nombre completo
+            <input id="name" name="name" type="text" maxlength="80"
+                   placeholder="Ej. María Pérez" required>
+          </label>
+          <label>
+            Matrícula
+            <input id="enrollment" name="enrollment" type="text" maxlength="20"
+                   placeholder="Ej. 2025-1234" required>
+          </label>
+          <label>
+            Correo electrónico
+            <input id="email" name="email" type="email" maxlength="100"
+                   placeholder="estudiante@correo.com" required>
+          </label>
+          <label>
+            Carrera
+            <input id="career" name="career" type="text" maxlength="80"
+                   placeholder="Ej. Desarrollo de Software" required>
+          </label>
+        </div>
+        <p id="formMessage" class="form-message" role="alert"></p>
+        <div class="form-actions">
+          <button class="button primary" id="submitButton" type="submit">Guardar estudiante</button>
+          <button class="button secondary hidden" id="cancelEdit" type="button">Cancelar edición</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="panel list-panel">
+      <div class="list-toolbar">
+        <div>
+          <h2>Listado de estudiantes</h2>
+          <p>Consulta y administra los registros.</p>
+        </div>
+        <label class="search-box">
+          <span class="sr-only">Buscar estudiantes</span>
+          <input id="searchInput" type="search" placeholder="Buscar por nombre, matrícula o carrera...">
+        </label>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Estudiante</th>
+              <th>Matrícula</th>
+              <th>Correo</th>
+              <th>Carrera</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="studentsTable">
+            <tr><td class="empty-state" colspan="5">Todavía no hay estudiantes registrados.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="table-note" id="resultsCount">0 resultados</p>
+    </section>
+
+    <footer>Proyecto académico CRUD · HTML, CSS y JavaScript</footer>
+  </main>
+</body>
+</html>
