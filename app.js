@@ -35,7 +35,7 @@ function renderStudents(query = "") {
     [student.name, student.enrollment, student.email, student.career]
       .some((value) => value.toLocaleLowerCase("es").includes(normalizedQuery))
   )
-  .sort((a, b) => a.name.localeCompare(b.name, "es"));
+  .sort((a, b) => a.name.localeCompare(b.name, "es", { sensitivity: "base", numeric: true }));
 
   tableBody.replaceChildren();
 
