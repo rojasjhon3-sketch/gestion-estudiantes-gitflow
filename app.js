@@ -30,10 +30,12 @@ function saveStudents() {
 
 function renderStudents(query = "") {
   const normalizedQuery = query.trim().toLocaleLowerCase("es");
-  const filtered = students.filter((student) =>
+  const filtered = students
+  .filter((student) =>
     [student.name, student.enrollment, student.email, student.career]
       .some((value) => value.toLocaleLowerCase("es").includes(normalizedQuery))
-  );
+  )
+  .sort((a, b) => a.name.localeCompare(b.name, "es"));
 
   tableBody.replaceChildren();
 
