@@ -165,6 +165,14 @@ form.addEventListener("submit", (event) => {
 });
 
 searchInput.addEventListener("input", () => renderStudents(searchInput.value));
+
+searchInput.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && searchInput.value) {
+    searchInput.value = "";
+    renderStudents();
+  }
+});
+
 cancelEditButton.addEventListener("click", resetForm);
 
 renderStudents();
