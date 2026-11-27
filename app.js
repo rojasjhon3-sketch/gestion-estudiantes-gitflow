@@ -30,10 +30,12 @@ function saveStudents() {
 
 function renderStudents(query = "") {
   const normalizedQuery = query.trim().toLocaleLowerCase("es");
-  const filtered = students.filter((student) =>
+  const filtered = students
+  .filter((student) =>
     [student.name, student.enrollment, student.email, student.career]
       .some((value) => value.toLocaleLowerCase("es").includes(normalizedQuery))
-  );
+  )
+  .sort((a, b) => a.name.localeCompare(b.name, "es", { sensitivity: "base", numeric: true }));
 
   tableBody.replaceChildren();
 
@@ -116,8 +118,18 @@ function deleteStudent(id) {
   if (!student) return;
   if (!window.confirm(`¿Deseas eliminar el registro de ${student.name}?`)) return;
 
+  const previousStudents = students;
   students = students.filter((item) => item.id !== id);
-  saveStudents();
+
+  try {
+    saveStudents();
+  } catch {
+    students = previousStudents;
+    formMessage.textContent = "No se pudo guardar la eliminación en el navegador. Inténtalo de nuevo.";
+    return;
+  }
+
+  formMessage.textContent = "";
   renderStudents(searchInput.value);
   if (studentIdInput.value === id) resetForm();
 }
@@ -161,6 +173,12 @@ form.addEventListener("submit", (event) => {
     return;
   }
   const editing = students.some((item) => item.id === student.id);
+  if (studentIdInput.value && !editing) {
+    resetForm();
+    formMessage.textContent = "El estudiante que intentas editar ya no está disponible. Vuelve a seleccionarlo.";
+    return;
+  }
+
   if (editing) {
     students = students.map((item) => item.id === student.id ? student : item);
   } else {
@@ -173,6 +191,14 @@ form.addEventListener("submit", (event) => {
 });
 
 searchInput.addEventListener("input", () => renderStudents(searchInput.value));
+
+searchInput.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && searchInput.value) {
+    searchInput.value = "";
+    renderStudents();
+  }
+});
+
 cancelEditButton.addEventListener("click", resetForm);
 
 renderStudents();
