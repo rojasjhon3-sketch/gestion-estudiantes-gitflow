@@ -132,7 +132,7 @@ form.addEventListener("submit", (event) => {
     id: studentIdInput.value || crypto.randomUUID(),
     name: nameInput.value.trim(),
     enrollment: enrollmentInput.value.trim(),
-    email: emailInput.value.trim(),
+    email: emailInput.value.trim().toLocaleLowerCase("es"),
     career: careerInput.value.trim()
   };
 
@@ -153,15 +153,15 @@ form.addEventListener("submit", (event) => {
   }
 
   const duplicateEmail = students.some((item) =>
-  item.email.toLocaleLowerCase("es") === student.email.toLocaleLowerCase("es")
-  && item.id !== student.id
-);
+    item.email.toLocaleLowerCase("es") === student.email
+    && item.id !== student.id
+  );
 
-if (duplicateEmail) {
-  formMessage.textContent = "Ya existe un estudiante con ese correo electrónico.";
-  emailInput.focus();
-  return;
-}
+  if (duplicateEmail) {
+    formMessage.textContent = "Ya existe un estudiante con ese correo electrónico.";
+    emailInput.focus();
+    return;
+  }
   const editing = students.some((item) => item.id === student.id);
   if (editing) {
     students = students.map((item) => item.id === student.id ? student : item);
