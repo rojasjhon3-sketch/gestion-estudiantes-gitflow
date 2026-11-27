@@ -118,8 +118,18 @@ function deleteStudent(id) {
   if (!student) return;
   if (!window.confirm(`¿Deseas eliminar el registro de ${student.name}?`)) return;
 
+  const previousStudents = students;
   students = students.filter((item) => item.id !== id);
-  saveStudents();
+
+  try {
+    saveStudents();
+  } catch {
+    students = previousStudents;
+    formMessage.textContent = "No se pudo guardar la eliminación en el navegador. Inténtalo de nuevo.";
+    return;
+  }
+
+  formMessage.textContent = "";
   renderStudents(searchInput.value);
   if (studentIdInput.value === id) resetForm();
 }
