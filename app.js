@@ -174,8 +174,8 @@ form.addEventListener("submit", (event) => {
   }
   const editing = students.some((item) => item.id === student.id);
   if (studentIdInput.value && !editing) {
-    formMessage.textContent = "El estudiante que intentas editar ya no está disponible. Vuelve a seleccionarlo.";
     resetForm();
+    formMessage.textContent = "El estudiante que intentas editar ya no está disponible. Vuelve a seleccionarlo.";
     return;
   }
 
