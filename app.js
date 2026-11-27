@@ -35,7 +35,7 @@ function renderStudents(query = "") {
     [student.name, student.enrollment, student.email, student.career]
       .some((value) => value.toLocaleLowerCase("es").includes(normalizedQuery))
   )
-  .sort((a, b) => a.name.localeCompare(b.name, "es"));
+  .sort((a, b) => a.name.localeCompare(b.name, "es", { sensitivity: "base", numeric: true }));
 
   tableBody.replaceChildren();
 
@@ -142,7 +142,7 @@ form.addEventListener("submit", (event) => {
     id: studentIdInput.value || crypto.randomUUID(),
     name: nameInput.value.trim(),
     enrollment: enrollmentInput.value.trim(),
-    email: emailInput.value.trim(),
+    email: emailInput.value.trim().toLocaleLowerCase("es"),
     career: careerInput.value.trim()
   };
 
@@ -162,7 +162,23 @@ form.addEventListener("submit", (event) => {
     return;
   }
 
+  const duplicateEmail = students.some((item) =>
+    item.email.toLocaleLowerCase("es") === student.email
+    && item.id !== student.id
+  );
+
+  if (duplicateEmail) {
+    formMessage.textContent = "Ya existe un estudiante con ese correo electrónico.";
+    emailInput.focus();
+    return;
+  }
   const editing = students.some((item) => item.id === student.id);
+  if (studentIdInput.value && !editing) {
+    resetForm();
+    formMessage.textContent = "El estudiante que intentas editar ya no está disponible. Vuelve a seleccionarlo.";
+    return;
+  }
+
   if (editing) {
     students = students.map((item) => item.id === student.id ? student : item);
   } else {
@@ -175,6 +191,14 @@ form.addEventListener("submit", (event) => {
 });
 
 searchInput.addEventListener("input", () => renderStudents(searchInput.value));
+
+searchInput.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && searchInput.value) {
+    searchInput.value = "";
+    renderStudents();
+  }
+});
+
 cancelEditButton.addEventListener("click", resetForm);
 
 renderStudents();
