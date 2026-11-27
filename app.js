@@ -161,6 +161,12 @@ if (duplicateEmail) {
   return;
 }
   const editing = students.some((item) => item.id === student.id);
+  if (studentIdInput.value && !editing) {
+    formMessage.textContent = "El estudiante que intentas editar ya no está disponible. Vuelve a seleccionarlo.";
+    resetForm();
+    return;
+  }
+
   if (editing) {
     students = students.map((item) => item.id === student.id ? student : item);
   } else {
